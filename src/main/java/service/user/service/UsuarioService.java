@@ -54,5 +54,6 @@ public class UsuarioService {
         return new UsuarioResponse(
                 usuario.getId(), usuario.getRol()
         );
-    }git
+    }
 }
+
