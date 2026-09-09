@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import service.user.dto.CrearUsuarioRequest;
-import service.user.dto.RolUsuario;
+import service.user.entity.RolUsuario;
 import service.user.dto.UsuarioResponse;
 import service.user.entity.Usuario;
 import service.user.exception.EmailYaRegistradoException;
@@ -54,5 +54,5 @@ public class UsuarioService {
         return new UsuarioResponse(
                 usuario.getId(), usuario.getRol()
         );
-    }
+    }git
 }
