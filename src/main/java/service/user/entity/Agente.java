@@ -1,5 +1,6 @@
 package service.user.entity;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -7,39 +8,26 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "agente")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Usuario {
+public class Agente {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(name = "usuario_id", unique = true, nullable = false)
+    private UUID usuarioId;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    @Column(name = "oficina_id", nullable = false)
+    private UUID oficinaId;
 
-    @Column(nullable = false)
-    private String nombre;
-
-    @Column(nullable = true)
-    private String telefono;
-
-
-    @Column(name="url_foto")
-    private String urlFoto;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private RolUsuario rol;
-
-    @Column(nullable = false)
-    @Builder.Default
-    private Boolean activo = true;
-
+    @Column(name = "zona_especialidad", nullable = true)
+    private String zonaEspecialidad;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -49,17 +37,13 @@ public class Usuario {
     private LocalDateTime updatedAt;
 
     @PrePersist
-    protected void onCreate(){
+    protected void onCreyaate(){
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
-    protected void onUpdate(){
-        this.updatedAt= LocalDateTime.now();
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
-
-
-
-
 }
