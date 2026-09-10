@@ -37,7 +37,7 @@ public class Agente {
     private LocalDateTime updatedAt;
 
     @PrePersist
-    protected void onCreyaate(){
+    protected void onCreate(){
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }

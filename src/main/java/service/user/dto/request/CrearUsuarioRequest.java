@@ -1,4 +1,4 @@
-package service.user.dto;
+package service.user.dto.request;
 
 public record CrearUsuarioRequest(
         String email,

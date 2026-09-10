@@ -1,10 +1,11 @@
 package service.user.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.user.dto.CrearUsuarioRequest;
-import service.user.dto.UsuarioResponse;
+import service.user.dto.request.CrearUsuarioRequest;
+import service.user.dto.response.UsuarioResponse;
 import service.user.service.UsuarioService;
 
 import java.util.UUID;
@@ -17,9 +18,11 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @PostMapping("")
-    public UsuarioResponse crearUsuario(@RequestBody CrearUsuarioRequest request){
+    public ResponseEntity<UsuarioResponse> crearUsuario(@RequestBody CrearUsuarioRequest request){
 
-        return usuarioService.crearUsuario(request);
+        UsuarioResponse usuarioResponse = usuarioService.crearUsuario(request);
+
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioResponse);
 
     }
 
