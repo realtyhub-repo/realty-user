@@ -26,8 +26,11 @@ public class Oficina {
     @Column(nullable = false)
     private String region;
 
-    @Column(name = "oficina_padre_id", nullable = true)
-    private UUID oficinaPadreId;
+    @Column(nullable = false)
+    private TipoOficina tipo;
+
+    @Column(name = "oficina_central_id", nullable = true)
+    private UUID oficinaCentralId;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
