@@ -1,4 +1,4 @@
-package service.user.dto;
+package service.user.dto.response;
 
 import service.user.entity.RolUsuario;
 
