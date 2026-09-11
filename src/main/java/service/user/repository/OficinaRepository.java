@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface OficinaRepository extends JpaRepository<Oficina, UUID> {
-    List<Oficina> findByOficinaPadreId(UUID oficinaPadreId);
+    List<Oficina> findByOficinaCentralId(UUID oficinaCentralId);
 }

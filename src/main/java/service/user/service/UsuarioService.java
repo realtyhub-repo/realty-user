@@ -10,10 +10,7 @@ import service.user.dto.response.UsuarioDetalleResponse;
 import service.user.entity.RolUsuario;
 import service.user.dto.response.UsuarioResponse;
 import service.user.entity.Usuario;
-import service.user.exception.AccesoNoAutorizadoException;
-import service.user.exception.AutoModificacionRolException;
-import service.user.exception.EmailYaRegistradoException;
-import service.user.exception.UsuarioNoEncontradoException;
+import service.user.exception.*;
 import service.user.repository.UsuarioRepository;
 import service.user.repository.UsuarioSpecifications;
 
@@ -109,7 +106,7 @@ public class UsuarioService {
             throw new AccesoNoAutorizadoException("Acceso no autorizado");
 
         if(id.equals(idSolicitante))
-            throw new AutoModificacionRolException("No puedes cambiar tu propio rol de administrador");
+            throw new AutoModificacionException("No puedes cambiar tu propio rol de administrador");
 
         Usuario usuarioPorId = usuarioRepository.findById(id)
                 .orElseThrow(()->
@@ -126,7 +123,7 @@ public class UsuarioService {
 
 
         if(id.equals(idSolicitante))
-            throw new AutoModificacionRolException("No puedes cambiar tu propio rol de administrador");
+            throw new AutoModificacionException("No puedes cambiar tu propio estado ");
 
         Usuario usuarioPorId = usuarioRepository.findById(id)
                 .orElseThrow(()->
