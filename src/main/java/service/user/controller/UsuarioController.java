@@ -17,7 +17,7 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
-    @PostMapping("")
+    @PostMapping("/internal")
     public ResponseEntity<UsuarioResponse> crearUsuario(@RequestBody CrearUsuarioRequest request){
 
         UsuarioResponse usuarioResponse = usuarioService.crearUsuario(request);
@@ -26,7 +26,7 @@ public class UsuarioController {
 
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/internal/{id}")
     public ResponseEntity<UsuarioResponse> buscarUsuarioId(@PathVariable UUID id){
 
         return ResponseEntity.ok(usuarioService.buscarUsuarioId(id));
