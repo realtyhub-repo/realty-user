@@ -47,6 +47,11 @@ public class GlobalExceptionHandler {
         return construirRespuesta(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
+    @ExceptionHandler(ContextoUsuarioInvalidoException.class)
+    public ResponseEntity<ErrorResponse> handleContextoUsuarioInvalidoException(ContextoUsuarioInvalidoException ex){
+        return construirRespuesta(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
     private ResponseEntity<ErrorResponse> construirRespuesta(HttpStatus status, String mensaje){
         ErrorResponse error = new ErrorResponse(mensaje, status.value(), LocalDateTime.now());
         return ResponseEntity.status(status).body(error);
