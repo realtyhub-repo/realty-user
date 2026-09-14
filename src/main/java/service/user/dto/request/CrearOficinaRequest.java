@@ -15,6 +15,7 @@ public record CrearOficinaRequest (
 
         @NotBlank
         TipoOficina tipo,
+
         UUID oficinaCentralId
 
 ) {
