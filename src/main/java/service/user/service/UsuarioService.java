@@ -134,6 +134,18 @@ public class UsuarioService {
         usuarioRepository.save(usuarioPorId);
 
     }
+
+    public Usuario buscarUsuarioIdInterno(UUID uuid){
+        return usuarioRepository.findById(uuid).orElseThrow(()->
+                new UsuarioNoEncontradoException("Usuario no encontrado")
+                );
+    }
+
+
+    public List<Usuario> obtenerUsuariosId(List<UUID> uuidList){
+        return usuarioRepository.findAllById(uuidList);
+    }
+
 }
 
 

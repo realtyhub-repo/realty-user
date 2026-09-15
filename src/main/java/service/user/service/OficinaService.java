@@ -104,4 +104,14 @@ public class OficinaService {
 
     }
 
+    public Oficina buscarOficinaIdInterno(UUID id){
+        return  oficinaRepository.findById(id)
+                .orElseThrow(() -> new OficinaNoEncontradaException("Oficina no encontrada"));
+    }
+
+    public Boolean validarExistencia(UUID id){
+        return oficinaRepository.findById(id).isEmpty();
+    }
+
+
 }

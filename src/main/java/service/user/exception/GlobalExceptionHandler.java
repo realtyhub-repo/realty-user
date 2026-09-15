@@ -52,6 +52,21 @@ public class GlobalExceptionHandler {
         return construirRespuesta(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
+    @ExceptionHandler(RolInvalidoParaAgenteException.class)
+    public ResponseEntity<ErrorResponse> handleRolInvalidoParaAgenteException(RolInvalidoParaAgenteException ex){
+        return construirRespuesta(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(AgenteNoEncontradoException.class)
+    public ResponseEntity<ErrorResponse> handleAgenteNoEncontradoException(AgenteNoEncontradoException ex){
+        return construirRespuesta(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(AgenteYaExisteException.class)
+    public ResponseEntity<ErrorResponse> handleAgenteYaExisteException(AgenteYaExisteException ex){
+        return construirRespuesta(HttpStatus.CONFLICT, ex.getMessage() );
+    }
+
     private ResponseEntity<ErrorResponse> construirRespuesta(HttpStatus status, String mensaje){
         ErrorResponse error = new ErrorResponse(mensaje, status.value(), LocalDateTime.now());
         return ResponseEntity.status(status).body(error);
