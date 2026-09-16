@@ -1,12 +1,14 @@
 package service.user.dto.response;
 
 import lombok.Builder;
+import lombok.Getter;
 import service.user.entity.Oficina;
 import service.user.entity.TipoOficina;
 
 import java.util.UUID;
 
 @Builder
+@Getter
 public class OficinaResponse {
 
 
@@ -17,7 +19,7 @@ public class OficinaResponse {
     private UUID oficinaCentralId;
 
     public static OficinaResponse from(Oficina oficina){
-        return OficinaResponse.builder()
+        return  OficinaResponse.builder()
                 .id(oficina.getId())
                 .nombre(oficina.getNombre())
                 .region(oficina.getRegion())
