@@ -64,6 +64,30 @@ public class UsuarioService {
         );
     }
 
+    public UsuarioDetalleResponse buscarUsuarioDetalle(UUID usuarioId){
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(()->
+                        new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+
+        return  UsuarioDetalleResponse.from(usuario);
+    }
+
+    public UsuarioDetalleResponse buscarUsuarioDetalle(RolUsuario rolSolicitante, UUID usuarioId){
+
+        if(rolSolicitante!=RolUsuario.ADMINISTRADOR_CENTRAL){
+            throw new AccesoNoAutorizadoException("Acceso no autorizado");
+        }
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(()->
+                        new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+
+        return  UsuarioDetalleResponse.from(usuario);
+    }
+
     public List<UsuarioDetalleResponse> listar(RolUsuario filtroRol, Boolean filtroActivo, RolUsuario rolSolicitante){
 
         if(rolSolicitante!=RolUsuario.ADMINISTRADOR_CENTRAL){
@@ -135,12 +159,17 @@ public class UsuarioService {
 
     }
 
+
+    /*
+    Estos métodos son internos, no usarse en
+    controladores, se recomienda solo usarse a
+    nivel de servicios
+    * */
     public Usuario buscarUsuarioIdInterno(UUID uuid){
         return usuarioRepository.findById(uuid).orElseThrow(()->
                 new UsuarioNoEncontradoException("Usuario no encontrado")
                 );
     }
-
 
     public List<Usuario> obtenerUsuariosId(List<UUID> uuidList){
         return usuarioRepository.findAllById(uuidList);

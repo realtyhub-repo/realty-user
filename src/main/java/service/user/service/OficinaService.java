@@ -66,7 +66,7 @@ public class OficinaService {
         return OficinaResponse.from(oficina);
     }
 
-    public List<OficinaResponse> lista(){
+    public List<OficinaResponse> listar(){
         return oficinaRepository.findAll().stream()
                 .map(OficinaResponse::from)
                 .toList();
