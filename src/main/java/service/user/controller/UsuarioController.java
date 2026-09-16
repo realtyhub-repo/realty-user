@@ -48,7 +48,7 @@ public class UsuarioController {
     ) {
 
         List<UsuarioDetalleResponse> usuarioDetalleResponseList = usuarioService
-                .listar(usuario.rol(), activo, rol);
+                .listar(rol, activo, usuario.rol());
 
         return ResponseEntity.ok(usuarioDetalleResponseList);
     }
