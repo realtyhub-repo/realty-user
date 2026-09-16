@@ -1,56 +1,101 @@
 package service.user.controller;
 
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.user.dto.request.CrearUsuarioRequest;
+import service.user.dto.request.ActualizarPerfilRequest;
+import service.user.dto.request.ActualizarRolRequest;
+import service.user.dto.request.ActualizarStatusRequest;
 import service.user.dto.response.UsuarioDetalleResponse;
-import service.user.dto.response.UsuarioResponse;
-import service.user.entity.Usuario;
-import service.user.exception.UsuarioNoEncontradoException;
-import service.user.repository.UsuarioRepository;
+import service.user.entity.RolUsuario;
 import service.user.security.ContextoUsuario;
 import service.user.security.UsuarioActual;
 import service.user.service.UsuarioService;
 
+import java.util.List;
 import java.util.UUID;
 
-@Slf4j
+@RequestMapping("/users")
 @RestController
-@RequestMapping("/usuario")
 @RequiredArgsConstructor
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
-    private final UsuarioRepository usuarioRepository;
 
-    @PostMapping("/internal")
-    public ResponseEntity<UsuarioResponse> crearUsuario(@RequestBody CrearUsuarioRequest request){
+    @GetMapping("/me")
+    public ResponseEntity<UsuarioDetalleResponse> usuarioActual(@UsuarioActual ContextoUsuario usuario) {
 
-        UsuarioResponse usuarioResponse = usuarioService.crearUsuario(request);
-
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioResponse);
-
+        UsuarioDetalleResponse response = usuarioService.buscarUsuarioDetalle(usuario.userId());
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/internal/{id}")
-    public ResponseEntity<UsuarioResponse> buscarUsuarioId(@PathVariable UUID id){
+    @PutMapping("/me")
+    public ResponseEntity<Void> actualizarUsuario(@UsuarioActual ContextoUsuario usuario,
+                                                  @Valid @RequestBody ActualizarPerfilRequest request) {
 
-        return ResponseEntity.ok(usuarioService.buscarUsuarioId(id));
+        usuarioService.actualizarUsuario(usuario.userId(), request);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping("/ADMIN")
-    public ResponseEntity<UsuarioDetalleResponse> cambiarRol(@UsuarioActual ContextoUsuario contexto){
+    @GetMapping()
+    public ResponseEntity<List<UsuarioDetalleResponse>> listarUsuarios(
+            @UsuarioActual ContextoUsuario usuario,
+            @RequestParam(name = "activo", required = false) Boolean activo,
+            @RequestParam(name = "rol", required = false) RolUsuario rol
+    ) {
 
-        Usuario usuario = usuarioRepository.findById(contexto.userId()).orElseThrow(
-                ()-> new UsuarioNoEncontradoException("no se encontro al usuario")
+        List<UsuarioDetalleResponse> usuarioDetalleResponseList = usuarioService
+                .listar(usuario.rol(), activo, rol);
+
+        return ResponseEntity.ok(usuarioDetalleResponseList);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UsuarioDetalleResponse> buscarUsuarioId(
+            @UsuarioActual ContextoUsuario usuario,
+            @PathVariable UUID id
+    ) {
+
+        UsuarioDetalleResponse response = usuarioService.buscarUsuarioDetalle(usuario.rol(), id);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}/role")
+    public ResponseEntity<Void> actualizarRol(
+            @PathVariable UUID id,
+            @Valid @RequestBody ActualizarRolRequest request,
+            @UsuarioActual ContextoUsuario usuario
+    ) {
+
+        usuarioService.cambiarRol(
+                id,
+                request.rolUsuario(),
+                usuario.rol(),
+                usuario.userId()
         );
 
-        usuario.setRol(contexto.rol());
-        Usuario guardado= usuarioRepository.save(usuario);
-        return ResponseEntity.ok().body(UsuarioDetalleResponse.from(guardado));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<Void> actualizarStatus(
+            @PathVariable UUID id,
+            @Valid @RequestBody ActualizarStatusRequest request,
+            @UsuarioActual ContextoUsuario usuario
+    ) {
+
+        usuarioService.cambiarEstado(
+                id,
+                request.status(),
+                usuario.rol(),
+                usuario.userId()
+        );
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
