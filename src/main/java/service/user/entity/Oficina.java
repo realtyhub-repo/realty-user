@@ -27,6 +27,7 @@ public class Oficina {
     private String region;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private TipoOficina tipo;
 
     @Column(name = "oficina_central_id", nullable = true)
