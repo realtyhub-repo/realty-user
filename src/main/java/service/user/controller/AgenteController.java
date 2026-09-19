@@ -24,7 +24,7 @@ public class AgenteController {
     @PostMapping()
     public ResponseEntity<AgenteResponse> crearAgente(@Valid @RequestBody CrearAgenteRequest request, @UsuarioActual ContextoUsuario usuario){
 
-        AgenteResponse agenteResponse = agenteService.crear(request, usuario.rol());
+        AgenteResponse agenteResponse = agenteService.crear(request, usuario.rol(), usuario.userId());
 
         return ResponseEntity.ok(agenteResponse);
     }
@@ -43,7 +43,7 @@ public class AgenteController {
             @UsuarioActual ContextoUsuario usuario
                                                  ){
 
-        agenteService.actualizar(id,request, usuario.rol());
+        agenteService.actualizar(id,request, usuario.rol(), usuario.userId());
 
         return ResponseEntity.noContent().build();
     }

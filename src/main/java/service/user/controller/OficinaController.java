@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.user.dto.request.ActualizarOficinaRequest;
+import service.user.dto.request.AsignarGerenteRequest;
 import service.user.dto.request.CrearOficinaRequest;
 import service.user.dto.response.AgenteResponse;
 import service.user.dto.response.OficinaResponse;
@@ -75,5 +76,23 @@ public class OficinaController {
         return ResponseEntity.status(HttpStatus.OK).body(agentes);
     }
 
+    @PutMapping("/{id}/gerente")
+    public ResponseEntity<Void> asignarGerente(
+            @PathVariable UUID id,
+            @UsuarioActual ContextoUsuario contexto,
+            @Valid @RequestBody AsignarGerenteRequest request) {
+
+        oficinaService.asignarGerente(id, contexto.rol(), request);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}/gerente")
+    public ResponseEntity<Void> removerGerente(
+            @PathVariable UUID id,
+            @UsuarioActual ContextoUsuario contexto) {
+
+        oficinaService.removerGerente(id, contexto.rol());
+        return ResponseEntity.noContent().build();
+    }
 
 }

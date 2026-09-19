@@ -3,15 +3,18 @@ package service.user.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import service.user.dto.request.ActualizarOficinaRequest;
+import service.user.dto.request.AsignarGerenteRequest;
 import service.user.dto.request.CrearOficinaRequest;
 import service.user.dto.response.OficinaResponse;
 import service.user.entity.Oficina;
 import service.user.entity.RolUsuario;
 import service.user.entity.TipoOficina;
+import service.user.entity.Usuario;
 import service.user.exception.*;
 import service.user.repository.OficinaRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -19,7 +22,7 @@ import java.util.UUID;
 public class OficinaService {
 
     private final OficinaRepository oficinaRepository;
-
+    private final UsuarioService usuarioService;
 
 
     public OficinaResponse crear(CrearOficinaRequest request, RolUsuario rolSolicitante){
@@ -78,16 +81,47 @@ public class OficinaService {
         if(rolSolicitante!=RolUsuario.ADMINISTRADOR_CENTRAL)
             throw new AccesoNoAutorizadoException("Acceso no autorizado");
 
+        if(request.nombre()==null && request.region()==null)
+            throw new RequestInconsistenteException("Es requerido al menos un campo");
+
         Oficina oficina = oficinaRepository.findById(id).orElseThrow(
                 ()-> new OficinaNoEncontradaException("Oficina no encontrada")
         );
 
-        oficina.setNombre(request.nombre());
-        oficina.setRegion(request.region());
+
+        if(request.nombre()!=null)
+            oficina.setNombre(request.nombre());
+
+        if(request.region()!=null)
+            oficina.setRegion(request.region());
 
         Oficina oficinaGuardada = oficinaRepository.save(oficina);
 
         return OficinaResponse.from(oficinaGuardada);
+    }
+
+
+    public void asignarGerente(UUID oficinaId, RolUsuario rolSolicitante, AsignarGerenteRequest request){
+        if(rolSolicitante!=RolUsuario.ADMINISTRADOR_CENTRAL)
+            throw new AccesoNoAutorizadoException("Acceso no autorizado");
+
+        Oficina oficina = buscarOficinaIdInterno(oficinaId);
+
+        Usuario usuario = usuarioService.buscarUsuarioIdInterno(request.gerenteId());
+
+        if(usuario.getRol()!=RolUsuario.GERENTE_OFICINA)
+            throw new RolInvalidoException("El usuario no tiene rol GERENTE_OFICINA");
+
+        Optional<Oficina> oficinaOptional = oficinaRepository.findByGerenteId(request.gerenteId());
+
+
+
+        if(oficinaOptional.isPresent())
+            throw new GerenteYaAsignadoException("Este usuario ya gerencia otra oficina");
+
+
+        oficina.setGerenteId(request.gerenteId());
+        oficinaRepository.save(oficina);
     }
 
     public List<OficinaResponse> obtenerSucursalesDeCentral(UUID oficinaCentralId){
@@ -114,4 +148,16 @@ public class OficinaService {
     }
 
 
+    public void removerGerente(UUID id, RolUsuario rolSolicitante) {
+        if(rolSolicitante!=RolUsuario.ADMINISTRADOR_CENTRAL)
+            throw new AccesoNoAutorizadoException("Acceso no autorizado");
+
+        Oficina oficina = buscarOficinaIdInterno(id);
+
+        if (oficina.getGerenteId()==null)
+            throw new OficinaSinGerenteException("Oficina aun sin gerente");
+
+        oficina.setGerenteId(null);
+        oficinaRepository.save(oficina);
+    }
 }
