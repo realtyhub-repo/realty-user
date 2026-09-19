@@ -12,6 +12,7 @@ import service.user.entity.RolUsuario;
 import service.user.entity.Usuario;
 import service.user.exception.*;
 import service.user.repository.AgenteRepository;
+import service.user.repository.OficinaRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,14 +27,24 @@ public class AgenteService {
     private final AgenteRepository agenteRepository;
     private final UsuarioService usuarioService;
     private final OficinaService oficinaService;
+    private final OficinaRepository oficinaRepository;
 
-    public AgenteResponse crear(CrearAgenteRequest request, RolUsuario rolSolicitante) {
+    public AgenteResponse crear(CrearAgenteRequest request, RolUsuario rolSolicitante, UUID usuarioSolicitanteId ) {
 
         if (rolSolicitante != RolUsuario.ADMINISTRADOR_CENTRAL &&
                 rolSolicitante != RolUsuario.GERENTE_OFICINA
         ) {
             throw new AccesoNoAutorizadoException("Acceso no autorizado");
         }
+
+        if (rolSolicitante == RolUsuario.GERENTE_OFICINA) {
+            Oficina oficinaDelGerente = oficinaRepository.findByGerenteId(usuarioSolicitanteId)
+                    .orElseThrow(() -> new AccesoNoAutorizadoException("No gerencia ninguna oficina"));
+
+            if (!oficinaDelGerente.getId().equals(request.oficinaId()))
+                throw new AccesoNoAutorizadoException("Solo puede gestionar agentes de su propia oficina");
+        }
+
 
         Usuario usuarioPorId = usuarioService.buscarUsuarioIdInterno(request.usuarioId());
 
@@ -84,12 +95,20 @@ public class AgenteService {
                 );
     }
 
-    public void actualizar (UUID id, ActualizarAgenteRequest request, RolUsuario rolSolicitante){
+    public void actualizar (UUID id, ActualizarAgenteRequest request, RolUsuario rolSolicitante,  UUID usuarioSolicitanteId ){
 
         if (rolSolicitante != RolUsuario.ADMINISTRADOR_CENTRAL &&
                 rolSolicitante != RolUsuario.GERENTE_OFICINA
         ) {
             throw new AccesoNoAutorizadoException("Acceso no autorizado");
+        }
+
+        if (rolSolicitante == RolUsuario.GERENTE_OFICINA) {
+            Oficina oficinaDelGerente = oficinaRepository.findByGerenteId(usuarioSolicitanteId)
+                    .orElseThrow(() -> new AccesoNoAutorizadoException("No gerencia ninguna oficina"));
+
+            if (!oficinaDelGerente.getId().equals(request.oficinaId()))
+                throw new AccesoNoAutorizadoException("Solo puede gestionar agentes de su propia oficina");
         }
 
         Agente agentePorId = agenteRepository.findById(id).orElseThrow(()->

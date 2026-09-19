@@ -17,6 +17,7 @@ public class OficinaResponse {
     private String region;
     private TipoOficina tipo;
     private UUID oficinaCentralId;
+    private UUID gerenteId;
 
     public static OficinaResponse from(Oficina oficina){
         return  OficinaResponse.builder()
@@ -25,6 +26,7 @@ public class OficinaResponse {
                 .region(oficina.getRegion())
                 .tipo(oficina.getTipo())
                 .oficinaCentralId(oficina.getOficinaCentralId())
+                .gerenteId(oficina.getGerenteId())
                 .build();
     }
 }

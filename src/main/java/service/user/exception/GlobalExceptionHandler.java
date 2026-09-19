@@ -12,6 +12,22 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(RolInvalidoException.class)
+    public ResponseEntity<ErrorResponse> handleRolInvalidoException(RolInvalidoException ex){
+        return construirRespuesta(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+
+    @ExceptionHandler(OficinaSinGerenteException.class)
+    public ResponseEntity<ErrorResponse> handleOficinaSinGerenteException(OficinaSinGerenteException ex){
+        return  construirRespuesta(HttpStatus.CONFLICT,ex.getMessage());
+    }
+
+    @ExceptionHandler(GerenteYaAsignadoException.class)
+    public ResponseEntity<ErrorResponse> handleGerenteYaAsignadoException(GerenteYaAsignadoException ex){
+        return construirRespuesta(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
     @ExceptionHandler(EmailYaRegistradoException.class)
     public ResponseEntity<ErrorResponse> handleEmailYaRegistrado(EmailYaRegistradoException ex){
         return construirRespuesta(HttpStatus.NOT_FOUND, ex.getMessage());

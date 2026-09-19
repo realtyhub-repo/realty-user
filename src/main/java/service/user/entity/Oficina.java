@@ -33,6 +33,9 @@ public class Oficina {
     @Column(name = "oficina_central_id", nullable = true)
     private UUID oficinaCentralId;
 
+    @Column(name = "gerente_id", nullable = true)
+    private UUID gerenteId;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
