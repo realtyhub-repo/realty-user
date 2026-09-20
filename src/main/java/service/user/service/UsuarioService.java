@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import service.user.dto.request.ActualizarPerfilRequest;
 import service.user.dto.request.CrearUsuarioRequest;
 import service.user.dto.response.UsuarioDetalleResponse;
+import service.user.dto.response.UsuarioInternalResponse;
 import service.user.entity.RolUsuario;
 import service.user.dto.response.UsuarioResponse;
 import service.user.entity.Usuario;
@@ -61,6 +62,19 @@ public class UsuarioService {
 
         return new UsuarioResponse(
                 usuario.getId(), usuario.getRol()
+        );
+    }
+
+    public UsuarioInternalResponse buscarUsuarioIdPropiedad(UUID usuarioId){
+
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(()->
+                        new UsuarioNoEncontradoException("Usuario no encontrado"));
+
+
+        return new UsuarioInternalResponse(
+                usuario.getId(), usuario.getNombre()
         );
     }
 

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.user.dto.request.CrearUsuarioRequest;
 import service.user.dto.response.UsuarioDetalleResponse;
+import service.user.dto.response.UsuarioInternalResponse;
 import service.user.dto.response.UsuarioResponse;
 import service.user.entity.Usuario;
 import service.user.exception.UsuarioNoEncontradoException;
@@ -53,4 +54,10 @@ public class UsuarioInternoController {
         return ResponseEntity.ok().body(UsuarioDetalleResponse.from(guardado));
     }
 
+
+    @GetMapping("/internal/users/{id}")
+    public ResponseEntity<UsuarioInternalResponse> buscarUsuarioPropiedad(@PathVariable UUID id){
+
+        return ResponseEntity.ok(usuarioService.buscarUsuarioIdPropiedad(id));
+    }
 }
