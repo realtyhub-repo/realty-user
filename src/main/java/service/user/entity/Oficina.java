@@ -27,6 +27,12 @@ public class Oficina {
     private String region;
 
     @Column(nullable = false)
+    private Double latitud;
+
+    @Column(nullable = false)
+    private Double longitud;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TipoOficina tipo;
 

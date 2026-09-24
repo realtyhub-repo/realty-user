@@ -52,6 +52,8 @@ public class OficinaService {
         Oficina oficinaCreada = Oficina.builder()
                 .nombre(request.nombre())
                 .region(request.region())
+                .latitud(request.latitud())
+                .longitud(request.longitud())
                 .tipo(request.tipo())
                 .oficinaCentralId(request.oficinaCentralId())
                 .build();
@@ -94,6 +96,12 @@ public class OficinaService {
 
         if(request.region()!=null)
             oficina.setRegion(request.region());
+
+        if(request.latitud()!=null)
+            oficina.setLatitud(request.latitud());
+
+        if(request.longitud()!=null)
+            oficina.setLongitud(request.longitud());
 
         Oficina oficinaGuardada = oficinaRepository.save(oficina);
 
