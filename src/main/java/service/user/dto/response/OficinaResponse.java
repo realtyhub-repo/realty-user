@@ -15,6 +15,8 @@ public class OficinaResponse {
     private UUID id;
     private String nombre;
     private String region;
+    private Double latitud;
+    private Double longitud;
     private TipoOficina tipo;
     private UUID oficinaCentralId;
     private UUID gerenteId;
@@ -24,6 +26,8 @@ public class OficinaResponse {
                 .id(oficina.getId())
                 .nombre(oficina.getNombre())
                 .region(oficina.getRegion())
+                .latitud(oficina.getLatitud())
+                .longitud(oficina.getLongitud())
                 .tipo(oficina.getTipo())
                 .oficinaCentralId(oficina.getOficinaCentralId())
                 .gerenteId(oficina.getGerenteId())
