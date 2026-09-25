@@ -43,8 +43,8 @@ public class OficinaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OficinaResponse> buscar(@PathVariable UUID oficinaId){
-       OficinaResponse response  =  oficinaService.buscarPorId(oficinaId);
+    public ResponseEntity<OficinaResponse> buscar(@PathVariable UUID id){
+       OficinaResponse response  =  oficinaService.buscarPorId(id);
 
        return ResponseEntity.ok(response);
     }

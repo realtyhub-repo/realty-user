@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import service.user.dto.request.ActualizarAgenteRequest;
 import service.user.dto.request.CrearAgenteRequest;
 import service.user.dto.response.AgenteResponse;
-import service.user.dto.response.UsuarioDetalleResponse;
+import service.user.dto.response.AgenteInternalResponse;
 import service.user.entity.Agente;
 import service.user.entity.Oficina;
 import service.user.entity.RolUsuario;
@@ -13,11 +13,13 @@ import service.user.entity.Usuario;
 import service.user.exception.*;
 import service.user.repository.AgenteRepository;
 import service.user.repository.OficinaRepository;
+import service.user.repository.UsuarioRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +30,7 @@ public class AgenteService {
     private final UsuarioService usuarioService;
     private final OficinaService oficinaService;
     private final OficinaRepository oficinaRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public AgenteResponse crear(CrearAgenteRequest request, RolUsuario rolSolicitante, UUID usuarioSolicitanteId ) {
 
@@ -164,6 +167,28 @@ public class AgenteService {
         return agenteResponseList;
     }
 
+    public List<AgenteInternalResponse> listarAgentesInterno(List<UUID> oficinasId){
+        List<Agente> agentesPorOficinaId = agenteRepository.findByOficinaIdIn(oficinasId);
+
+        List<UUID> listaIdAgentes = agentesPorOficinaId.stream()
+                .map(Agente::getUsuarioId)
+                .toList();
+
+        List<Usuario> usuariosAgentes = usuarioRepository.findByIdInAndActivoTrue(listaIdAgentes);
+
+        Map<UUID,Usuario> usuarioMap = usuariosAgentes.stream()
+                .collect(Collectors.toMap(
+                        Usuario::getId,
+                        usuario -> usuario
+                ));
+
+        return agentesPorOficinaId.stream()
+                .filter(a->usuarioMap.containsKey(a.getUsuarioId()))
+                .map(a -> AgenteInternalResponse.from(a,usuarioMap.get(a.getUsuarioId())))
+                .toList();
+
+
+    }
 
     private Agente buscarAgenteIdInterno(UUID agenteId) {
 
