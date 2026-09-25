@@ -192,7 +192,7 @@ public class AgenteService {
 
     private Agente buscarAgenteIdInterno(UUID agenteId) {
 
-        return agenteRepository.findById(agenteId).orElseThrow(() ->
+        return agenteRepository.findByUsuarioId(agenteId).orElseThrow(() ->
                 new AgenteNoEncontradoException("Agente no encontrado")
         );
 
