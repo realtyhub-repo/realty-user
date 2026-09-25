@@ -4,10 +4,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import service.user.entity.Usuario;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, UUID>, JpaSpecificationExecutor<Usuario> {
     Optional<Usuario> findByEmail(String email);
-
+    List<Usuario> findByIdInAndActivoTrue(List<UUID> ids);
 }

@@ -11,4 +11,5 @@ public interface AgenteRepository extends JpaRepository<Agente, UUID> {
 
     Optional<Agente> findByUsuarioId(UUID usuarioId);
     List<Agente> findByOficinaId(UUID oficinaId);
+    List<Agente> findByOficinaIdIn(List<UUID> oficinaIds);
 }
