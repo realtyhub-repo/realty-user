@@ -20,14 +20,14 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/internal")
 @RequiredArgsConstructor
 public class UsuarioInternoController {
 
     private final UsuarioService usuarioService;
     private final UsuarioRepository usuarioRepository;
 
-    @PostMapping("/internal")
+    @PostMapping("/usuario")
     public ResponseEntity<UsuarioResponse> crearUsuario(@RequestBody CrearUsuarioRequest request){
 
         UsuarioResponse usuarioResponse = usuarioService.crearUsuario(request);
@@ -36,7 +36,7 @@ public class UsuarioInternoController {
 
     }
 
-    @GetMapping("/internal/{id}")
+    @GetMapping("/usuario/{id}")
     public ResponseEntity<UsuarioResponse> buscarUsuario(@PathVariable UUID id){
 
         return ResponseEntity.ok(usuarioService.buscarUsuarioId(id));
@@ -55,7 +55,7 @@ public class UsuarioInternoController {
     }
 
 
-    @GetMapping("/internal/users/{id}")
+    @GetMapping("/usuario/detalle/{id}")
     public ResponseEntity<UsuarioInternalResponse> buscarUsuarioPropiedad(@PathVariable UUID id){
 
         return ResponseEntity.ok(usuarioService.buscarUsuarioIdPropiedad(id));
