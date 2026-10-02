@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import service.user.dto.request.ActualizarPerfilRequest;
 import service.user.dto.request.CrearUsuarioRequest;
+import service.user.dto.response.UsuarioContactoInternalResponse;
 import service.user.dto.response.UsuarioDetalleResponse;
 import service.user.dto.response.UsuarioInternalResponse;
 import service.user.entity.RolUsuario;
@@ -171,6 +172,13 @@ public class UsuarioService {
         usuarioPorId.setActivo(activo);
         usuarioRepository.save(usuarioPorId);
 
+    }
+
+
+    public UsuarioContactoInternalResponse buscarUsuarioParaLead(UUID id){
+        Usuario usuario = buscarUsuarioIdInterno(id);
+
+        return UsuarioContactoInternalResponse.from(usuario);
     }
 
 
