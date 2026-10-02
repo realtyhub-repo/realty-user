@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.user.dto.request.CrearUsuarioRequest;
+import service.user.dto.response.UsuarioContactoInternalResponse;
 import service.user.dto.response.UsuarioDetalleResponse;
 import service.user.dto.response.UsuarioInternalResponse;
 import service.user.dto.response.UsuarioResponse;
@@ -59,5 +60,11 @@ public class UsuarioInternoController {
     public ResponseEntity<UsuarioInternalResponse> buscarUsuarioPropiedad(@PathVariable UUID id){
 
         return ResponseEntity.ok(usuarioService.buscarUsuarioIdPropiedad(id));
+    }
+
+    @GetMapping("/usuario/{id}/contacto")
+    public ResponseEntity<UsuarioContactoInternalResponse> buscarUsuarioParaLead(@PathVariable UUID id){
+
+        return ResponseEntity.ok(usuarioService.buscarUsuarioParaLead(id));
     }
 }
