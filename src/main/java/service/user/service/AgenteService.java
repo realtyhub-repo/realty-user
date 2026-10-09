@@ -106,17 +106,27 @@ public class AgenteService {
             throw new AccesoNoAutorizadoException("Acceso no autorizado");
         }
 
+        Agente agentePorId = agenteRepository.findById(id).orElseThrow(()->
+                new AgenteNoEncontradoException("Agente no encontrado")
+        );
+
         if (rolSolicitante == RolUsuario.GERENTE_OFICINA) {
+
             Oficina oficinaDelGerente = oficinaRepository.findByGerenteId(usuarioSolicitanteId)
                     .orElseThrow(() -> new AccesoNoAutorizadoException("No gerencia ninguna oficina"));
 
+
+
             if (!oficinaDelGerente.getId().equals(request.oficinaId()))
+                throw new AccesoNoAutorizadoException("Solo puede gestionar agentes de su propia oficina");
+
+            if(!agentePorId.getOficinaId().equals(oficinaDelGerente.getId()))
                 throw new AccesoNoAutorizadoException("Solo puede gestionar agentes de su propia oficina");
         }
 
-        Agente agentePorId = agenteRepository.findById(id).orElseThrow(()->
-                new AgenteNoEncontradoException("Agente no encontrado")
-                );
+
+
+
 
         if(oficinaService.validarExistencia(request.oficinaId())){
             throw new OficinaNoEncontradaException("Oficina no encontrada");
@@ -192,7 +202,7 @@ public class AgenteService {
 
     private Agente buscarAgenteIdInterno(UUID agenteId) {
 
-        return agenteRepository.findByUsuarioId(agenteId).orElseThrow(() ->
+        return agenteRepository.findById(agenteId).orElseThrow(() ->
                 new AgenteNoEncontradoException("Agente no encontrado")
         );
 

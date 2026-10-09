@@ -3,6 +3,7 @@ package service.user.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import service.user.dto.internal.ErrorResponse;
@@ -30,7 +31,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EmailYaRegistradoException.class)
     public ResponseEntity<ErrorResponse> handleEmailYaRegistrado(EmailYaRegistradoException ex){
-        return construirRespuesta(HttpStatus.NOT_FOUND, ex.getMessage());
+        return construirRespuesta(HttpStatus.CONFLICT, ex.getMessage());
     }
 
     @ExceptionHandler(AccesoNoAutorizadoException.class)
@@ -63,9 +64,19 @@ public class GlobalExceptionHandler {
         return construirRespuesta(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
+        return construirRespuesta(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
     @ExceptionHandler(ContextoUsuarioInvalidoException.class)
     public ResponseEntity<ErrorResponse> handleContextoUsuarioInvalidoException(ContextoUsuarioInvalidoException ex){
         return construirRespuesta(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
+    @ExceptionHandler(UsuarioNoEncontradoException.class)
+    public ResponseEntity<ErrorResponse> handleUsuarioNoEncontradoException(UsuarioNoEncontradoException ex){
+        return construirRespuesta(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     @ExceptionHandler(RolInvalidoParaAgenteException.class)

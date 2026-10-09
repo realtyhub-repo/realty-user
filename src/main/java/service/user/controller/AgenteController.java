@@ -3,6 +3,7 @@ package service.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.user.dto.request.ActualizarAgenteRequest;
@@ -26,7 +27,7 @@ public class AgenteController {
 
         AgenteResponse agenteResponse = agenteService.crear(request, usuario.rol(), usuario.userId());
 
-        return ResponseEntity.ok(agenteResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(agenteResponse);
     }
 
     @GetMapping("/{id}")
