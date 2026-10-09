@@ -239,14 +239,14 @@ class AgenteServiceTest {
     @Test
     void obtenerPorId_deberiaLanzarExcepcionSiElAgenteNoExiste() {
 
-        UUID usuarioId = UUID.randomUUID();
+        UUID agenteId = UUID.randomUUID();
 
-        when(agenteRepository.findByUsuarioId(usuarioId))
+        when(agenteRepository.findById(agenteId))
                 .thenReturn(Optional.empty());
 
         assertThrows(
                 AgenteNoEncontradoException.class,
-                () -> agenteService.obtenerPorId(usuarioId)
+                () -> agenteService.obtenerPorId(agenteId)
         );
     }
 

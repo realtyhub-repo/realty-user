@@ -52,7 +52,7 @@ public class OficinaController {
     @PutMapping("/{id}")
     public ResponseEntity<OficinaResponse> actualizarOficina(
             @PathVariable UUID id,
-            @RequestBody  ActualizarOficinaRequest oficinaRequest,
+            @Valid @RequestBody  ActualizarOficinaRequest oficinaRequest,
             @UsuarioActual ContextoUsuario usuario
     ){
 
