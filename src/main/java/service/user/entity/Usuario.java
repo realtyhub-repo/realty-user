@@ -29,7 +29,7 @@ public class Usuario {
     private String telefono;
 
 
-    @Column(name="url_foto")
+    @Column(name="url_foto",columnDefinition = "TEXT")
     private String urlFoto;
 
     @Enumerated(EnumType.STRING)
