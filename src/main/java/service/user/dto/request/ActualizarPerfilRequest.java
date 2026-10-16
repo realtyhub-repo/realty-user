@@ -2,11 +2,11 @@ package service.user.dto.request;
 
 
 import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Null;
+import jakarta.validation.constraints.Pattern;
 
 public record ActualizarPerfilRequest(
-        @NotBlank
+        @Nullable
+        @Pattern(regexp = ".*\\S.*")
         String nombre,
 
         @Nullable
