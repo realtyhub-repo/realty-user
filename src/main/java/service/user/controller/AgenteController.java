@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.user.dto.request.ActualizarAgenteRequest;
 import service.user.dto.request.CrearAgenteRequest;
+import service.user.dto.response.AgentePerfilResponse;
 import service.user.dto.response.AgenteResponse;
 import service.user.security.ContextoUsuario;
 import service.user.security.UsuarioActual;
@@ -35,6 +36,13 @@ public class AgenteController {
         AgenteResponse agenteResponse = agenteService.obtenerPorId(id);
 
         return ResponseEntity.ok(agenteResponse);
+    }
+
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<AgentePerfilResponse> buscarAgentePorUsuarioId(@PathVariable UUID usuarioId){
+        AgentePerfilResponse perfilResponse = agenteService.obtenerPorUsuarioId(usuarioId);
+
+        return ResponseEntity.ok(perfilResponse);
     }
 
     @PutMapping("/{id}")

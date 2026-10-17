@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import service.user.dto.request.ActualizarAgenteRequest;
 import service.user.dto.request.CrearAgenteRequest;
+import service.user.dto.response.AgentePerfilResponse;
 import service.user.dto.response.AgenteResponse;
 import service.user.dto.response.AgenteInternalResponse;
 import service.user.entity.Agente;
@@ -96,6 +97,30 @@ public class AgenteService {
                 oficinaPorId.getNombre(),
                 agentePorId.getZonaEspecialidad()
                 );
+    }
+
+    public AgentePerfilResponse obtenerPorUsuarioId(UUID usuarioId){
+
+        Agente agente = agenteRepository.findByUsuarioId(usuarioId).orElseThrow(() ->
+                new AgenteNoEncontradoException("Agente no encontrado")
+        );
+
+        Usuario usuario = usuarioService.buscarUsuarioIdInterno(usuarioId);
+
+        if (!Boolean.TRUE.equals(usuario.getActivo()))
+            throw new AgenteNoEncontradoException("Agente no encontrado");
+
+        Oficina oficina = oficinaService.buscarOficinaIdInterno(agente.getOficinaId());
+
+        return new AgentePerfilResponse(
+                agente.getId(),
+                usuario.getId(),
+                usuario.getNombre(),
+                usuario.getUrlFoto(),
+                oficina.getId(),
+                oficina.getNombre(),
+                agente.getZonaEspecialidad()
+        );
     }
 
     public void actualizar (UUID id, ActualizarAgenteRequest request, RolUsuario rolSolicitante,  UUID usuarioSolicitanteId ){
